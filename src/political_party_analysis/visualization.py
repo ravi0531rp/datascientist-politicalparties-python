@@ -67,4 +67,28 @@ def plot_finnish_parties(transformed_data: pd.DataFrame, splot: pyplot.subplot =
         {"parties": ["PS"], "country": "fin", "color": "k"},
     ]
     ##### YOUR CODE GOES HERE #####
-    pass
+    for group in finnish_parties:
+        country = group["country"]
+        parties = group["parties"]
+        color = group["color"]
+
+        label = " ".join(parties)
+        if splot is None:
+            _, splot = pyplot.subplots(figsize=(4,3))
+
+        subset = transformed_data[
+            transformed_data.index.get_level_values(2) == country &
+            transformed_data.index.get_level_values(1).isin(parties)
+        ]
+        scatter_plot(
+            subset[[subset.columns[0], subset.columns[1]],
+            color = color,
+            size = 10,
+            splot= splot,
+            label = 
+        )
+        splot.title("Finnish Parties")
+        splot.set_xlabel("1st Component")
+        splot.set_ylabel("2nd Component")
+        splot.legend()
+        pyplot.show()
