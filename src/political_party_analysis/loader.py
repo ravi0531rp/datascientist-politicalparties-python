@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import List
 from urllib.request import urlretrieve
+from sklearn.preprocessing import StandardScaler
 
 import pandas as pd
 
@@ -25,7 +26,8 @@ class DataLoader:
     def remove_duplicates(self, df: pd.DataFrame) -> pd.DataFrame:
         """Write a function to remove duplicates in a dataframe"""
         ##### YOUR CODE GOES HERE #####
-        pass
+        df = df.drop_duplicates()
+        return df
 
     def remove_nonfeature_cols(
         self, df: pd.DataFrame, non_features: List[str], index: List[str]
@@ -33,19 +35,28 @@ class DataLoader:
         """Write a function to remove certain features cols and set certain cols as indices
         in a dataframe"""
         ##### YOUR CODE GOES HERE #####
-        pass
+        df = df.drop(columns = non_features, errors = 'ignore')
+        return df.set_index(index)
 
     def handle_NaN_values(self, df: pd.DataFrame) -> pd.DataFrame:
         """Write a function to handle NaN values in a dataframe"""
         ##### YOUR CODE GOES HERE #####
-        pass
+        df = df.fillna(df.median())
+        return df
 
     def scale_features(self, df: pd.DataFrame) -> pd.DataFrame:
         """Write a function to normalise values in a dataframe. Use StandardScaler."""
         ##### YOUR CODE GOES HERE #####
-        pass
+        scaler = StandardScaler()
+        df[:] = scaler.fit_transform()
+        return df
 
     def preprocess_data(self):
         """Write a function to combine all pre-processing steps for the dataset"""
         ##### YOUR CODE GOES HERE #####
-        pass
+        df = self.party_data.copy()
+        df = self.remove_duplicates(df)
+        df = self.remove_nonfeature_cols(df, self.non_features, self.index)
+        df = self.handle_NaN_values(df)
+        df = self.scale_features(df)
+        return df
